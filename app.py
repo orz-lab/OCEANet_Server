@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request 
-from threading import Timer
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
 import random
 
 
@@ -8,9 +9,8 @@ fish_data = {
     "cachep": [50]
 }
 
-def update_data(interval):
+def update_data():
     print("update_data")
-    Timer(interval, update_data, [interval]).start()
     global fish_data
     for fish in fish_data:
         fish_data[fish].append(fish_data[fish][-1] + random.uniform(-1,1))
@@ -19,6 +19,7 @@ def update_data(interval):
 
 
 app = Flask(__name__)
+scheduler = BackgroundScheduler()
 
 @app.route("/get_price")
 def get_price():
@@ -27,9 +28,14 @@ def get_price():
         return jsonify({'price': fish_data[fish][-1]}) 
     return jsonify({}) 
 
-if __name__ == '__main__':
-    update_data(1)
-    app.run()
 
+scheduler.add_job(func=update_data, trigger="interval", seconds=0.2)
+
+
+if __name__ == '__main__':
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
+    app.run()
+    
 
 
