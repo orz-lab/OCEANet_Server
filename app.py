@@ -9,10 +9,38 @@ fish_data = {
 
 app = Flask(__name__)
 
+class cachep_delta_class:
+    count = 0
+    
+    def cal(self, delta):
+        delta = random.uniform(-2, 2)
+        if random.randint(0,50) == 0:  
+            delta = random.uniform(-10,10)
+        
+        if random.uniform(0,1) <= 0.25 ** self.count:
+            if delta > 0:
+                delta = -abs(delta)
+            else:
+                delta = abs(delta)
+        
+        if delta > 0:
+            self.count += 1
+        else:
+            self.count -= 1
+        
+        return delta
+
+cachep_delta = cachep_delta_class()
+
 def update_data():
     global fish_data
     for fish in fish_data:
-        fish_data[fish].append(fish_data[fish][-1] + random.uniform(-1,1))
+        delta = random.uniform(-1,1)
+        
+        if fish == "cachep":
+            delta = cachep_delta.cal(delta)
+                
+        fish_data[fish].append(fish_data[fish][-1] + delta)
         if  len(fish_data[fish]) >= MAX_LOG:
             fish_data[fish].pop(0)
 
