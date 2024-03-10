@@ -34,8 +34,8 @@ def get_price():
         return jsonify({'price': fish_data[fish][-1]}) 
     return jsonify({}) 
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
     
 
 
