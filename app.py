@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request 
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask_apscheduler import APScheduler
 import atexit
 import random
 
@@ -9,6 +9,16 @@ fish_data = {
     "cachep": [50]
 }
 
+class Config:
+    SCHEDULER_API_ENABLED = True
+    
+app = Flask(__name__)
+app.config.from_object(Config())
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
+
+@scheduler.task('interval', id='do_job_1', seconds=0.2)
 def update_data():
     print("update_data")
     global fish_data
@@ -17,10 +27,6 @@ def update_data():
         if  len(fish_data[fish]) >= MAX_LOG:
             fish_data[fish].pop(0)
 
-
-app = Flask(__name__)
-scheduler = BackgroundScheduler()
-
 @app.route("/get_price")
 def get_price():
     fish = request.args.get('fish') 
@@ -28,13 +34,7 @@ def get_price():
         return jsonify({'price': fish_data[fish][-1]}) 
     return jsonify({}) 
 
-
-scheduler.add_job(func=update_data, trigger="interval", seconds=0.2)
-
-
 if __name__ == '__main__':
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
     app.run()
     
 
