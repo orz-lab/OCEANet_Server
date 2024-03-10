@@ -9,6 +9,7 @@ fish_data = {
 }
 
 def update_data(interval):
+    print("update_data")
     Timer(interval, update_data, [interval]).start()
     global fish_data
     for fish in fish_data:
