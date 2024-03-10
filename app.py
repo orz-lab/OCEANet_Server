@@ -17,7 +17,6 @@ def update_data(interval):
         if  len(fish_data[fish]) >= MAX_LOG:
             fish_data[fish].pop(0)
 
-update_data(1)
 
 app = Flask(__name__)
 
@@ -29,6 +28,7 @@ def get_price():
     return jsonify({}) 
 
 if __name__ == '__main__':
+    update_data(1)
     app.run()
 
 
