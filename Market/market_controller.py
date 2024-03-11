@@ -46,7 +46,7 @@ def update_data():
         if "market" in fish_data[fish]:
             delta = fish_data[fish]["market"].cal(delta)
                 
-        fish_data[fish]["log"].append(fish_data[fish]["log"][-1] + delta)
+        fish_data[fish]["log"].append(max(0,fish_data[fish]["log"][-1] + delta))
         if  len(fish_data[fish]) >= MAX_LOG:
             fish_data[fish].pop(0)
             
