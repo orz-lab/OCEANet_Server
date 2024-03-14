@@ -52,22 +52,25 @@ def make_new_user(username:str = '', password:str = ''):
     return True
 
 def update_inventory(username, password, money, fish_inventory):
-    if not login_check(username, password):
-        return
-    
-    
-    with open(DATA_PATH, "r") as f:
-        data = json.load(f)
+    try:
+        if not login_check(username, password):
+            return
         
-    data[username]["money"] = money
-    data[username]["fish_inventory"] = fish_inventory
-    
-    with open(DATA_PATH,"w") as f:
-        json.dump(data, f)
+        
+        with open(DATA_PATH, "r") as f:
+            data = json.load(f)
+            
+        data[username]["money"] = money
+        data[username]["fish_inventory"] = fish_inventory
+        
+        with open(DATA_PATH,"w") as f:
+            json.dump(data, f)
+    except:
+        print("loi")
 
 def get_inventory(username):
     if not is_has_user(username):
-        return {}
+        return 0, {}
 
     with open(DATA_PATH, "r") as f:
         data = json.load(f)
