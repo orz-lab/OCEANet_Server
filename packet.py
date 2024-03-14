@@ -4,6 +4,12 @@ import enum
 
 class Action(enum.Enum):
     Update_price = enum.auto()
+    ConnectOk = enum.auto()
+    ConnectDeny = enum.auto()
+    Connect = enum.auto()
+    Update_inventory = enum.auto()
+    Get_inventory = enum.auto()
+    Send_inventory = enum.auto()
     
 
 class Packet:
@@ -24,6 +30,30 @@ class Packet:
 class Update_pricePacket(Packet):
     def __init__(self, *message):
         super().__init__(Action.Update_price, message)
+    
+class Update_inventoryPacket(Packet):
+    def __init__(self, username: str, password: str, money: float, fish_inventory: list):
+        super().__init__(Action.Update_inventory, username, password, money, fish_inventory)  
+
+class Get_inventoryPacket(Packet):
+    def __init__(self, username: str):
+        super().__init__(Action.Get_inventory, username)  
+
+class Send_inventoryPacket(Packet):
+    def __init__(self, money: float, fish_inventory: list):
+        super().__init__(Action.Send_inventory, money, fish_inventory)  
+
+class ConnectOkPacket(Packet):
+    def __init__(self):
+        super().__init__(Action.ConnectOk)
+
+class ConnectDenyPacket(Packet):
+    def __init__(self, reason: str):
+        super().__init__(Action.ConnectDeny, reason)
+
+class ConnectPacket(Packet):
+    def __init__(self, username: str, password: str):
+        super().__init__(Action.Connect, username, password)
 
 def from_json(json_str: str) -> Packet:
     obj_dict = json.loads(json_str)
