@@ -58,5 +58,3 @@ def update_data():
             
 def get_fish(fish):
     return fish_data[fish]["log"][-1]
-
-update_data()

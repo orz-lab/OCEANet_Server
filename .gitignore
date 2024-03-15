@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 certs
+Market/data.json
 build/
 develop-eggs/
 dist/

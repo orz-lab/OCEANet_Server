@@ -1,9 +1,10 @@
 import sys
+import os
 import protocol
 from twisted.python import log
 from twisted.internet import reactor, task, ssl
 from autobahn.twisted.websocket import WebSocketServerFactory
-
+import json
 
 class GameFactory(WebSocketServerFactory):
     def __init__(self, hostname: str, port: int):
@@ -26,7 +27,12 @@ class GameFactory(WebSocketServerFactory):
         return p
 
 
+
 if __name__ == '__main__':
+    if not os.path.exists("./Market/data.json"):
+        with open("./Market/data.json", 'w') as f:
+            json.dump({}, f, indent=4, separators=(',', ': '))
+    
     log.startLogging(sys.stdout)
 
     certs_dir: str = f"{sys.path[0]}/certs/"

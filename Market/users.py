@@ -48,7 +48,7 @@ def make_new_user(username:str = '', password:str = ''):
     data[username]["password"] = calculate_sha256(password)
     
     with open(DATA_PATH,"w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4, separators=(',', ': '))
     return True
 
 def update_inventory(username, password, money, fish_inventory):
@@ -64,7 +64,7 @@ def update_inventory(username, password, money, fish_inventory):
         data[username]["fish_inventory"] = fish_inventory
         
         with open(DATA_PATH,"w") as f:
-            json.dump(data, f)
+            json.dump(data, f, indent=4, separators=(',', ': '))
     except:
         print("loi")
 
